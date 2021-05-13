@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model talk {
+  id            BigInt          @id @default(autoincrement())
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  deleted       Boolean         @default(false)
+  date          DateTime
+  place         String
+  name          String
+  description   String          @db.LongText
+  speakers      speaker[]       @relation(references: [id])
+  thumb         String          @unique
+
+}
+
+model speaker {
+  id                   BigInt                 @id @default(autoincrement())
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  deleted              Boolean                @default(false)
+  name                 String
+  photo                String                 @unique
+  thumb                String                 @unique
+  description          String                 @db.LongText
+  excerpt              String                 @db.LongText
+  talks                talk[]                 @relation(references: [id])
+}
+
